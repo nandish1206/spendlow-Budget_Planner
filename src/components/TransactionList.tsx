@@ -6,7 +6,9 @@ import Transition from './Transition';
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Trash2, RefreshCw, ListFilter } from 'lucide-react';
+import { Trash2, RefreshCw, ListFilter, Download } from 'lucide-react';
+import { exportTransactionsByMonth } from '@/utils/exportTransactions';
+import { toast } from "sonner";
 
 interface TransactionListProps {
   className?: string;
@@ -41,6 +43,15 @@ const TransactionList: React.FC<TransactionListProps> = ({ className }) => {
     setDisplayLimit(5);
   };
 
+  const handleExport = () => {
+    if (filteredTransactions.length === 0) {
+      toast.error('No transactions to export');
+      return;
+    }
+    exportTransactionsByMonth(filteredTransactions);
+    toast.success('Transactions exported successfully');
+  };
+
   return (
     <Transition appear="fade" className={cn(
       "w-full glass-morphism rounded-xl p-5 sm:p-6",
@@ -53,17 +64,29 @@ const TransactionList: React.FC<TransactionListProps> = ({ className }) => {
           Transactions
         </h2>
         
-        {filteredTransactions.length > 5 && (
+        <div className="flex gap-2">
           <Button
             variant="outline"
             size="sm"
-            onClick={displayLimit === 5 ? showAll : showLess}
+            onClick={handleExport}
             className="text-xs h-8"
           >
-            <RefreshCw className="mr-1 h-3 w-3" />
-            {displayLimit === 5 ? 'View All' : 'Show Less'}
+            <Download className="mr-1 h-3 w-3" />
+            Export
           </Button>
-        )}
+          
+          {filteredTransactions.length > 5 && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={displayLimit === 5 ? showAll : showLess}
+              className="text-xs h-8"
+            >
+              <RefreshCw className="mr-1 h-3 w-3" />
+              {displayLimit === 5 ? 'View All' : 'Show Less'}
+            </Button>
+          )}
+        </div>
       </div>
       
       {isLoading ? (
