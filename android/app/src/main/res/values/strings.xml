@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">budgetplanner</string>
+    <string name="title_activity_main">budgetplanner</string>
+    <string name="package_name">com.nandish.budgetplanner</string>
+    <string name="custom_url_scheme">com.nandish.budgetplanner</string>
+</resources>
